@@ -1,0 +1,24 @@
+create procedure fine(in roll int(10))
+begin
+declare x int;
+declare fine int;
+declare issuedate int;
+declare continue handler for not found
+begin
+select 'lawde';
+end;
+select dateofissue into issuedate from borrower where rollno=roll;
+select datediff(curdate(),issuedate) into x;
+if x>14 and x<31
+then
+set fine=x*5;
+insert into fine values(roll,curdate(),fine);
+elseif x>30
+then
+set fine=((x-30)*50);
+insert into fine values(roll,curdate(),fine);
+else
+insert into fine values(roll,curdate(),0);
+end if;
+update borrower set status="returned" where rollno=roll;
+end //
